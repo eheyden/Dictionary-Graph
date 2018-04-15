@@ -13,7 +13,7 @@ public class Graph<E> implements GraphADT<E> {
     
     class GraphNode<E>{
         public HashMap<E, GraphNode<E>> neighbors;
-        public GraphNode(E data) {
+        public GraphNode() {
             neighbors = new HashMap<E, GraphNode<E>>();
         }
         
@@ -31,7 +31,7 @@ public class Graph<E> implements GraphADT<E> {
     @Override
     public E addVertex(E vertex) {
         if(vertex == null || nodes.containsKey(vertex)) return null;
-        GraphNode<E> node = new GraphNode<E>(vertex);
+        GraphNode<E> node = new GraphNode<E>();
         nodes.put(vertex, node);
         return vertex;
     }
