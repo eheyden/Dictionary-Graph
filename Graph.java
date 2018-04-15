@@ -1,5 +1,4 @@
-import java.util.LinkedList;
-
+import java.util.HashMap;
 /**
  * Undirected and unweighted graph implementation
  * 
@@ -10,42 +9,30 @@ import java.util.LinkedList;
  */
 public class Graph<E> implements GraphADT<E> {
     
-    private LinkedList<GraphNode<E>> nodes;
+    private HashMap<E, GraphNode<E>> nodes;
     
     class GraphNode<E>{
-        private E data;
-        public LinkedList<GraphNode<E>> neighbors;
+        public HashMap<E, GraphNode<E>> neighbors;
         public GraphNode(E data) {
-            neighbors = new LinkedList<GraphNode<E>>();
-            this.data = data;
+            neighbors = new HashMap<E, GraphNode<E>>();
         }
-        public E getData() {return data;}
         
     }
     
     public Graph() {
-        nodes = new LinkedList<GraphNode<E>>();
+        nodes = new HashMap<E, GraphNode<E>>();
         
     }
-    /**
-     * Instance variables and constructors
-     */
 
-    private GraphNode<E> getNode(E data){
-        for(GraphNode<E> node : nodes) {
-            if(node.getData().equals(data)) return node;
-        }
-        return null;
-    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public E addVertex(E vertex) {
-        
-        if(vertex == null || getNode(vertex) != null) return null;
+        if(vertex == null || nodes.containsKey(vertex)) return null;
         GraphNode<E> node = new GraphNode<E>(vertex);
-        nodes.add(node);
+        nodes.put(vertex, node);
         return vertex;
     }
 
@@ -54,10 +41,10 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public E removeVertex(E vertex) {
-        GraphNode<E> node = getNode(vertex);
-        if(vertex == null || node == null) return null;
-        for(GraphNode<E> neighbor : node.neighbors) {
-            removeEdge(neighbor.getData(), vertex);
+        GraphNode<E> node = nodes.get(vertex);
+        if(node == null) return null;
+        for(E key : node.neighbors.keySet()) {
+            removeEdge(key, vertex);
         }
         nodes.remove(node);
         return vertex;
@@ -72,12 +59,12 @@ public class Graph<E> implements GraphADT<E> {
         if(vertex1 == null || vertex2 == null) return false;
         if(vertex1.equals(vertex2)) return false;
         
-        GraphNode<E> node1 = getNode(vertex1);
-        GraphNode<E> node2 = getNode(vertex2);
+        GraphNode<E> node1 = nodes.get(vertex1);
+        GraphNode<E> node2 = nodes.get(vertex2);
         if(node1 == null || node2 == null) return false;
-        if(node1.neighbors.contains(node2)) return false;
-        node2.neighbors.add(node1);
-        node1.neighbors.add(node2);
+        if(node1.neighbors.containsKey(vertex2)) return false;
+        node2.neighbors.put(vertex1, node1);
+        node1.neighbors.put(vertex2, node2);
         return true;
     }    
 
@@ -89,12 +76,12 @@ public class Graph<E> implements GraphADT<E> {
         if(vertex1 == null || vertex2 == null) return false;
         if(vertex1.equals(vertex2)) return false;
         
-        GraphNode<E> node1 = getNode(vertex1);
-        GraphNode<E> node2 = getNode(vertex2);
+        GraphNode<E> node1 = nodes.get(vertex1);
+        GraphNode<E> node2 = nodes.get(vertex2);
         if(node1 == null || node2 == null) return false;
-        if(!node2.neighbors.contains(node1)) return false;
-        node2.neighbors.remove(node1);
-        node1.neighbors.remove(node2);
+        if(!node2.neighbors.containsKey(vertex1)) return false;
+        node2.neighbors.remove(vertex1);
+        node1.neighbors.remove(vertex2);
         return true;
     }
 
@@ -106,10 +93,9 @@ public class Graph<E> implements GraphADT<E> {
         if(vertex1 == null || vertex2 == null) return false;
         if(vertex1.equals(vertex2)) return false;
         
-        GraphNode<E> node1 = getNode(vertex1);
-        GraphNode<E> node2 = getNode(vertex2);
-        if(node1 == null || node2 == null) return false;
-        if(node1.neighbors.contains(node2)) return true;
+        GraphNode<E> node1 = nodes.get(vertex1);
+        if(node1 == null) return false;
+        if(node1.neighbors.containsKey(vertex2)) return true;
         return false;
     }
 
@@ -118,13 +104,9 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public Iterable<E> getNeighbors(E vertex) {
-        if(vertex == null) return null;
-        
-        GraphNode<E> node = getNode(vertex);
+        GraphNode<E> node = nodes.get(vertex);
         if(node == null) return null;
-        LinkedList<E> list = new LinkedList<E>();
-        for(GraphNode<E> neighbor : node.neighbors) list.add(neighbor.getData());
-        return list;
+        return node.neighbors.keySet();
     }
 
     /**
@@ -132,9 +114,7 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public Iterable<E> getAllVertices() {
-        LinkedList<E> vertices = new LinkedList<E>();
-        for(GraphNode<E> node : nodes) vertices.add(node.getData());
-        return vertices;
+        return nodes.keySet();
     }
 
 }
