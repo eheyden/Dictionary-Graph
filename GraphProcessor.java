@@ -87,6 +87,8 @@ public class GraphProcessor {
             return -1;
         }
 
+        shortestPathPrecomputation();
+
         return count;
     }
 
@@ -128,14 +130,24 @@ public class GraphProcessor {
      */
     public List<String> getShortestPath(String word1, String word2) {
         List<String> list = new ArrayList<>();
+
+        if (pathMaps == null) {
+            System.out.print("Error in GraphProcessor.getShortestPath: "
+                            + "shorestPathPrecomputation() must be called before any calls to getShortestPath()");
+            return list;
+        }
+
         HashMap<String, PathNode> pathMap = pathMaps.get(word1);
         if (word1.equals(word2) || !pathMap.containsKey(word2)) return list;
+
+        // Backtrace the path using parents of pathNodes
         Stack<String> pathStack = new Stack<>();
         PathNode backtraceNode = pathMap.get(word2);
         while (backtraceNode != null) {
             pathStack.push(backtraceNode.word);
             backtraceNode = pathMap.get(backtraceNode.parent);
         }
+
         list.addAll(pathStack);
         return list;
     }
@@ -161,6 +173,12 @@ public class GraphProcessor {
      * @return Integer distance
      */
     public Integer getShortestDistance(String word1, String word2) {
+        if (pathMaps == null) {
+            System.out.print("Error in GraphProcessor.getShortestPath: "
+                            + "shorestPathPrecomputation() must be called before any calls to getShortestDistance()");
+            return -1;
+        }
+
         if (word1.equals(word2) || !pathMaps.get(word1).containsKey(word2)) return -1;
         return pathMaps.get(word1).get(word2).length;
     }
@@ -184,11 +202,15 @@ public class GraphProcessor {
             PriorityQueue<PathNode> frontier = new PriorityQueue<>((p1, p2) -> -Integer.compare(p1.length, p2.length)); // pQ search frontier
             ArrayList<String> explored = new ArrayList<>(); // explored words
             frontier.add(new PathNode(s,null, 0));
+
             while (!frontier.isEmpty()) {
-                PathNode searchNode = frontier.remove();
+                PathNode searchNode = frontier.remove(); // remove the pathNode with highest priority (least length)
                 if(!explored.contains(searchNode.word)) {
                     for (String neighbor: graph.getNeighbors(searchNode.word)) {
+                        // Throw away current path if existing path has smaller length
                         if (pathNodes.containsKey(neighbor) && pathNodes.get(neighbor).length < searchNode.length + 1) continue;
+
+                        // Add current path to pathNodes
                         pathNodes.put(neighbor, new PathNode(neighbor, searchNode.word, searchNode.length + 1));
                     }
                     explored.add(searchNode.word);
