@@ -12,10 +12,10 @@ public class Graph<E> implements GraphADT<E> {
     
 	private LinkedList<Graphnode<E>> nodes;
 	
-	class GraphNode<E>{
+	class Graphnode<E>{
 		private E data;
-		public LinkedList<GraphNode<E>> neighbors;
-		public GraphNode(E data) {
+		public LinkedList<Graphnode<E>> neighbors;
+		public Graphnode(E data) {
 			this.data = data;
 		}
 		
