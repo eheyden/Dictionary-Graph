@@ -121,7 +121,9 @@ public class Graph<E> implements GraphADT<E> {
         
         GraphNode<E> node = getNode(vertex);
         if(node == null) return null;
-        return (Iterable<E>) node.neighbors;
+        LinkedList<E> list = new LinkedList<E>();
+        for(GraphNode<E> neighbor : node.neighbors) list.add(neighbor.getData());
+        return list;
     }
 
     /**
@@ -129,7 +131,9 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public Iterable<E> getAllVertices() {
-        return (Iterable<E>) nodes;
+        LinkedList<E> vertices = new LinkedList<E>();
+        for(GraphNode<E> node : nodes) vertices.add(node.getData());
+        return vertices;
     }
 
 }
