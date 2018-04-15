@@ -82,27 +82,12 @@ public class GraphProcessorTest {
     }
 
     /*
-     * This test exam the getShortestPath() with one of the word not found
-     * 
-     * success if return a empty List of String, fail otherwise
-     */
-    @Test
-    public void test_06_getShortestPath_if_word_not_found() {
-        graphProcessor.populateGraph("word_list.txt");
-        graphProcessor.shortestPathPrecomputation();
-
-        List<String> expecteds = new ArrayList<String>();
-        List<String> actuals = graphProcessor.getShortestPath("BELLIES", "THISWORDDOESNTEXIST");
-        assertEquals(expecteds, actuals);
-    }
-
-    /*
      * This test exam the getShortestPath() with 2 words where connection doesn't exist
      * 
      * success if return a empty List of String, fail otherwise
      */
     @Test
-    public void test_07_getShortestPath_if_path_does_not_exist() {
+    public void test_06_getShortestPath_if_path_does_not_exist() {
         graphProcessor.populateGraph("no_connection.txt");
         graphProcessor.shortestPathPrecomputation();
 
@@ -118,7 +103,7 @@ public class GraphProcessorTest {
      * success if the # of edges is the same as expected, fail otherwise
      */
     @Test
-    public void test_08_getShortestDistance_part_1() {
+    public void test_07_getShortestDistance_part_1() {
         graphProcessor.populateGraph("word_list.txt");
         graphProcessor.shortestPathPrecomputation();
 
@@ -132,7 +117,7 @@ public class GraphProcessorTest {
      * success if the # of edges is the same as expected, fail otherwise
      */
     @Test
-    public void test_09_getShortestDistance_part_2() {
+    public void test_08_getShortestDistance_part_2() {
         graphProcessor.populateGraph("word_list.txt");
         graphProcessor.shortestPathPrecomputation();
 
@@ -146,25 +131,11 @@ public class GraphProcessorTest {
      * success if return -1, fail otherwise
      */
     @Test
-    public void test_10_getShortestDistance_between_two_identical_words() {
+    public void test_09_getShortestDistance_between_two_identical_words() {
         graphProcessor.populateGraph("word_list.txt");
         graphProcessor.shortestPathPrecomputation();
 
         int actual = graphProcessor.getShortestDistance("BELLIES", "BELLIES");
-        assertEquals(-1, actual);
-    }
-
-    /*
-     * This test exam the getShortestDistance() with one of the word not found
-     * 
-     * success if return -1, fail otherwise
-     */
-    @Test
-    public void test_11_getShortesDistance_if_word_not_found() {
-        graphProcessor.populateGraph("word_list.txt");
-        graphProcessor.shortestPathPrecomputation();
-
-        int actual = graphProcessor.getShortestDistance("BELLIES", "THISWORDDOESNTEXIST");
         assertEquals(-1, actual);
     }
 
@@ -174,14 +145,11 @@ public class GraphProcessorTest {
      * success if return -1, fail otherwise
      */
     @Test
-    public void test_12_getShortestDistance_if_path_does_not_exist() {
+    public void test_10_getShortestDistance_if_path_does_not_exist() {
         graphProcessor.populateGraph("no_connection.txt");
         graphProcessor.shortestPathPrecomputation();
 
         int actual = graphProcessor.getShortestDistance("cat", "dog");
         assertEquals(-1, actual);
     }
-
-
-
 }
