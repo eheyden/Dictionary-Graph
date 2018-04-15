@@ -42,7 +42,8 @@ public class Graph<E> implements GraphADT<E> {
      */
     @Override
     public E addVertex(E vertex) {
-        if(vertex == null || nodes.contains(vertex)) return null;
+        
+        if(vertex == null || getNode(vertex) != null) return null;
         GraphNode<E> node = new GraphNode<E>(vertex);
         nodes.add(node);
         return vertex;
