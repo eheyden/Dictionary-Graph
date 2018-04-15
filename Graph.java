@@ -10,19 +10,20 @@ import java.util.LinkedList;
  */
 public class Graph<E> implements GraphADT<E> {
     
-	private LinkedList<Graphnode<E>> nodes;
+	private LinkedList<GraphNode<E>> nodes;
 	
 	class GraphNode<E>{
 		private E data;
 		public LinkedList<GraphNode<E>> neighbors;
 		public GraphNode(E data) {
+			neighbors = new LinkedList<GraphNode<E>>();
 			this.data = data;
 		}
 		
 	}
 	
 	public Graph() {
-		nodes = new LinkedList<Graphnode<E>>;
+		nodes = new LinkedList<GraphNode<E>>;
 		
 	}
     /**
