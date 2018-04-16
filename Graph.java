@@ -73,7 +73,7 @@ public class Graph<E> implements GraphADT<E> {
         for(E key : node.neighbors.keySet()) {
             removeEdge(key, vertex);
         }
-        nodes.remove(node);
+        nodes.remove(vertex);
         return vertex;
         
     }
