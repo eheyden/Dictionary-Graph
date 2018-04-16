@@ -4,6 +4,15 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Assignment: Exercise4, Due: 04/16/18
+ * 
+ * GraphProcessorTest class provides 10 tests to exam the functionality
+ * of the GraphProcessor class
+ *
+ * @author Xinyang Hu(xhu257@wisc.edu)
+ */
+
 public class GraphProcessorTest {
     GraphProcessor graphProcessor;
 
