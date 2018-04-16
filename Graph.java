@@ -10,7 +10,7 @@ import java.util.HashMap;
  * Undirected and unweighted graph implementation
  * @param <E> type of a vertex
  * 
- * @author Evan Heyden (eheyden@wisc.edu), Xinyang Hu (xhu257@wisc.edu)
+ * @author Evan Heyden (eheyden@wisc.edu), Jiayuan Huang (jhuang345@wisc.edu)
  */
 public class Graph<E> implements GraphADT<E> {
     

@@ -1,8 +1,53 @@
+//////////////////// ALL ASSIGNMENTS INCLUDE THIS SECTION /////////////////////
+//
+// Title: Dictionary-Graph
+// Files: GraphProcessorTest.java; GraphProcessor.java; Graph.java; 
+// GraphADT.java; GraphTest.java; WordProcessor.java
+// Course: CS400, Spring 2018
+//
+// Author: Xinyang Hu
+// Email: xhu257@wisc.edu
+// Lecturer's Name: Debra Deppeler
+//
+//////////////////// PAIR PROGRAMMERS COMPLETE THIS SECTION ///////////////////
+//
+// Partner Name: Eric Huang, Evan Heyden, Ribhav Hora, Harry Huang
+// Partner Email: N/A
+// Lecturer's Name: Debra Deppeler
+//
+// VERIFY THE FOLLOWING BY PLACING AN X NEXT TO EACH TRUE STATEMENT:
+// _X__ Write-up states that pair programming is allowed for this assignment.
+// _X__ We have both read and understand the course Pair Programming Policy.
+// _X__ We have registered our team prior to the team registration deadline.
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+// Students who get help from sources other than their partner must fully
+// acknowledge and credit those sources of help here. Instructors and TAs do
+// not need to be credited here, but tutors, friends, relatives, room mates
+// strangers, etc do. If you received no outside help from either type of
+// source, then please explicitly indicate NONE.
+//
+// Persons: (identify each person and describe their help in detail)
+// Online Sources: (identify each URL and describe their assistance in detail)
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
+
 import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+
+/**
+ * Assignment: Exercise4, Due: 04/16/18
+ * 
+ * GraphProcessorTest class provides 10 tests to exam the functionality
+ * of the GraphProcessor class
+ *
+ * @author Xinyang Hu(xhu257@wisc.edu)
+ */
 
 public class GraphProcessorTest {
     GraphProcessor graphProcessor;
