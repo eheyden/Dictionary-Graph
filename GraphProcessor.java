@@ -1,6 +1,10 @@
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * This class adds additional functionality to the graph as a whole.
@@ -78,10 +82,12 @@ public class GraphProcessor {
             return -1;
         }
 
-        int count = 0;
+        final AtomicInteger count = new AtomicInteger();
         try {
-            wordStream.forEach(word -> addWordToGraph(graph, word));
-            count++;
+            wordStream.forEach(word -> {
+                addWordToGraph(graph, word);
+                count.incrementAndGet();
+            });
         }catch (NullPointerException npe) {
             System.out.print("Error in GraphProcessor.populateGraph(): Null element in Stream");
             return -1;
@@ -89,7 +95,7 @@ public class GraphProcessor {
 
         shortestPathPrecomputation();
 
-        return count;
+        return count.intValue();
     }
 
     /**
@@ -138,7 +144,7 @@ public class GraphProcessor {
         }
 
         HashMap<String, PathNode> pathMap = pathMaps.get(word1);
-        if (word1.equals(word2) || !pathMap.containsKey(word2)) return list;
+        if (word1.equals(word2) || pathMap == null || !pathMap.containsKey(word2)) return list;
 
         // Backtrace the path using parents of pathNodes
         Stack<String> pathStack = new Stack<>();
@@ -147,8 +153,9 @@ public class GraphProcessor {
             pathStack.push(backtraceNode.word);
             backtraceNode = pathMap.get(backtraceNode.parent);
         }
+        pathStack.push(word1);
 
-        list.addAll(pathStack);
+        while (!pathStack.isEmpty()) list.add(pathStack.pop());
         return list;
     }
     
@@ -179,7 +186,8 @@ public class GraphProcessor {
             return -1;
         }
 
-        if (word1.equals(word2) || !pathMaps.get(word1).containsKey(word2)) return -1;
+        HashMap<String, PathNode> pathMap = pathMaps.get(word1);
+        if (word1.equals(word2) || pathMap == null || !pathMap.containsKey(word2)) return -1;
         return pathMaps.get(word1).get(word2).length;
     }
     
@@ -193,28 +201,37 @@ public class GraphProcessor {
     public void shortestPathPrecomputation() {
         pathMaps = new HashMap<>();
         Iterable<String> vertices = graph.getAllVertices();
+        StreamSupport.stream(vertices.spliterator(), true).forEach(this::ucs_all_paths);
 
-        for (String s: vertices) {
-            HashMap<String, PathNode> pathNodes = new HashMap<>(); // All paths from the current word
-            pathMaps.put(s, pathNodes);
+//        for (Map.Entry<String, PathNode> dest: pathMaps.get("JOLLIES").entrySet()) {
+//            System.out.println(dest.getValue());
+//        }
+    }
 
-            // UCS shortest path algorithm
-            PriorityQueue<PathNode> frontier = new PriorityQueue<>((p1, p2) -> -Integer.compare(p1.length, p2.length)); // pQ search frontier
-            ArrayList<String> explored = new ArrayList<>(); // explored words
-            frontier.add(new PathNode(s,null, 0));
+    private void ucs_all_paths(String s) {
+        HashMap<String, PathNode> pathNodes = new HashMap<>(); // All paths from the current word
+        pathMaps.put(s, pathNodes);
 
-            while (!frontier.isEmpty()) {
-                PathNode searchNode = frontier.remove(); // remove the pathNode with highest priority (least length)
-                if(!explored.contains(searchNode.word)) {
-                    for (String neighbor: graph.getNeighbors(searchNode.word)) {
-                        // Throw away current path if existing path has smaller length
-                        if (pathNodes.containsKey(neighbor) && pathNodes.get(neighbor).length < searchNode.length + 1) continue;
+        // UCS shortest path algorithm
+        PriorityQueue<PathNode> frontier = new PriorityQueue<>((p1, p2) -> -Integer.compare(p1.length, p2.length)); // pQ search frontier
+        ArrayList<String> explored = new ArrayList<>(); // explored words
+        frontier.add(new PathNode(s,null, 0));
 
-                        // Add current path to pathNodes
-                        pathNodes.put(neighbor, new PathNode(neighbor, searchNode.word, searchNode.length + 1));
+        while (!frontier.isEmpty()) {
+            PathNode searchNode = frontier.remove(); // remove the pathNode with highest priority (least length)
+            if(!explored.contains(searchNode.word)) {
+                for (String neighbor: graph.getNeighbors(searchNode.word)) {
+                    // Throw away current path if existing path has smaller length
+                    if (explored.contains(neighbor) || (pathNodes.containsKey(neighbor) && pathNodes.get(neighbor).length < searchNode.length + 1)) continue;
+
+                    // Add current path to pathNodes
+                    PathNode newPathNode = new PathNode(neighbor, searchNode.word, searchNode.length + 1);
+                    pathNodes.put(neighbor, newPathNode);
+                    if (!explored.contains(neighbor) && !frontier.contains(newPathNode)) {
+                        frontier.add(newPathNode);
                     }
-                    explored.add(searchNode.word);
                 }
+                explored.add(searchNode.word);
             }
         }
     }
@@ -231,6 +248,20 @@ public class GraphProcessor {
             this.word = word;
             this.parent = parent;
             this.length = length;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            try {
+                PathNode p = (PathNode) o;
+                return p.word.equals(word);
+            }catch (Exception e) {
+                return false;
+            }
+        }
+
+        public String toString(){
+            return String.format("%s %s %d", word, parent, length);
         }
     }
 }
