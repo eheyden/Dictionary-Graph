@@ -34,8 +34,6 @@
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -124,7 +122,6 @@ public class GraphProcessor {
 		try {
 			wordStream = WordProcessor.getWordStream(filepath);
 		} catch (IOException ioe) {
-			System.out.print(ioe.getMessage());
 			return -1;
 		}
 
@@ -135,7 +132,6 @@ public class GraphProcessor {
 				count.incrementAndGet();
 			});
 		} catch (NullPointerException npe) {
-			System.out.print("Error in GraphProcessor.populateGraph(): Null element in Stream");
 			return -1;
 		}
 

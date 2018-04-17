@@ -1,3 +1,4 @@
+
 //////////////////// ALL ASSIGNMENTS INCLUDE THIS SECTION /////////////////////
 //
 // Title: Dictionary-Graph
@@ -77,7 +78,7 @@ public class GraphProcessorTest {
 	 */
 	@Test
 	public void test_02_populateGraph_file_not_found() {
-		int actual = graphProcessor.populateGraph("");
+		int actual = graphProcessor.populateGraph("random.txt");
 		assertEquals(-1, actual);
 	}
 
