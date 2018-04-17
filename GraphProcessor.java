@@ -122,7 +122,7 @@ public class GraphProcessor {
 		try {
 			wordStream = WordProcessor.getWordStream(filepath);
 		} catch (IOException ioe) {
-			System.out.print(ioe.getMessage());
+			System.out.print("Error in GraphProcessor.populateGraph(): File not found");
 			return -1;
 		}
 
