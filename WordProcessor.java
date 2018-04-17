@@ -29,7 +29,8 @@ public class WordProcessor {
 	 *             exception resulting from accessing the filepath
 	 */
 	public static Stream<String> getWordStream(String filepath) throws IOException {
-		return Files.lines(Paths.get(filepath)).map(String::trim).filter(x -> x != null && !x.equals("")).map(String::toUpperCase);
+		return Files.lines(Paths.get(filepath)).map(String::trim).filter(x -> x != null && !x.equals(""))
+				.map(String::toUpperCase);
 	}
 
 	/**
