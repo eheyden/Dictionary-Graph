@@ -34,8 +34,6 @@
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
